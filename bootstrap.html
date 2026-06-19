@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bootstrap — Grid & Components</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<!-- Bootstrap 5 CDN -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  /* Custom design layer on top of Bootstrap */
+  :root {
+    --bs-body-bg: #f0f4ff;
+    --bs-body-color: #111827;
+    --purple: #6366f1;
+    --purple-light: #a5b4fc;
+    --dark-bg: #0f0f1a;
+  }
+
+  body { font-family: 'Inter', sans-serif; background: var(--bs-body-bg); }
+
+  /* HERO */
+  .custom-hero {
+    background: var(--dark-bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 3rem 1rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .custom-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(99,102,241,0.2) 0%, transparent 70%);
+  }
+
+  .custom-hero .badge-pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    background: rgba(99,102,241,0.15);
+    border: 1px solid rgba(99,102,241,0.3);
+    color: var(--purple-light);
+    padding: 0.4rem 1.1rem;
+    border-radius: 100px;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+
+  .custom-hero h1 {
+    font-size: clamp(2.5rem, 8vw, 5.5rem);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .custom-hero h1 span { color: var(--purple-light); }
+
+  .custom-hero p {
+    font-size: 1.1rem;
+    color: #9ca3af;
+    max-width: 560px;
+    line-height: 1.7;
+    position: relative;
+  }
+
+  /* CODE CALLOUT */
+  .code-strip {
+    background: var(--dark-bg);
+    border-top: 1px solid #1f2937;
+    border-bottom: 1px solid #1f2937;
+    padding: 2.5rem 1.5rem;
+  }
+
+  .code-strip pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    color: #a5b4fc;
+    margin: 0;
+    overflow-x: auto;
+    line-height: 1.8;
+  }
+
+  .code-strip pre .kw { color: #c084fc; }
+  .code-strip pre .str { color: #86efac; }
+  .code-strip pre .cm { color: #4b5563; }
+  .code-strip pre .tag { color: #fb923c; }
+
+  /* SECTION LABELS */
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 0.5rem;
+  }
+
+  .section-bg-white { background: #fff; }
+  .section-bg-light { background: var(--bs-body-bg); }
+
+  /* GRID DEMO */
+  .grid-demo-col {
+    background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(99,102,241,0.05));
+    border: 1px dashed rgba(99,102,241,0.3);
+    border-radius: 8px;
+    padding: 0.75rem;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--purple);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+
+  /* COMPONENT CARDS */
+  .component-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--purple);
+    margin-bottom: 0.75rem;
+  }
+
+  .comp-block {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+
+  /* OVERRIDE Bootstrap card for showcase */
+  .card-showcase {
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .card-showcase:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(99,102,241,0.15);
+  }
+
+  /* RESPONSIVE TABLE */
+  .table-custom th {
+    background: #f3f4f6;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #374151;
+  }
+
+  /* UTILITY DEMOS */
+  .util-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .util-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: #6b7280;
+    width: 100%;
+    margin-bottom: 0.25rem;
+  }
+
+  /* BREAKPOINT VIS */
+  .bp-bar {
+    height: 36px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+
+  footer-custom {
+    display: block;
+    text-align: center;
+    padding: 2rem;
+    color: #9ca3af;
+    font-size: 0.8rem;
+    border-top: 1px solid #e5e7eb;
+    font-family: 'JetBrains Mono', monospace;
+    background: #fff;
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="custom-hero">
+  <div class="badge-pill">Module 04 — Framework</div>
+  <h1>Boot<span>strap</span> 5</h1>
+  <p>The world's most-used CSS framework. Pre-built components, a responsive 12-column grid, and hundreds of utility classes — ship UIs in a fraction of the time.</p>
+</div>
+
+<!-- WHAT IS BOOTSTRAP -->
+<div class="section-bg-white py-5">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-md-6">
+        <div class="eyebrow">What it is</div>
+        <h2 class="fw-bold mb-3" style="font-size:2rem;">CSS you don't have to write</h2>
+        <p class="text-muted lh-lg">Bootstrap provides a standardised set of CSS classes you apply directly to HTML. Instead of writing <code>display:flex; align-items:center; gap:1rem;</code> from scratch, you write <code class="text-danger">d-flex align-items-center gap-3</code>.</p>
+        <p class="text-muted lh-lg mt-3">It enforces consistency, speeds up development, and is mobile-first by default — meaning styles apply to small screens first, then expand up.</p>
+      </div>
+      <div class="col-md-6">
+        <div class="code-strip rounded-4">
+<pre><span class="cm"><!-- Without Bootstrap --></span>
+<span class="tag">&lt;style&gt;</span>
+  .card { border-radius: 8px; padding: 1.5rem;
+          box-shadow: 0 2px 8px rgba(0,0,0,.1); }
+  .btn  { padding: .5rem 1rem; border-radius: 6px;
+          background: #0d6efd; color: #fff; }
+<span class="tag">&lt;/style&gt;</span>
+
+<span class="cm"><!-- With Bootstrap (no CSS file needed) --></span>
+<span class="tag">&lt;div</span> <span class="kw">class</span>=<span class="str">"card p-4 shadow-sm rounded-3"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;button</span> <span class="kw">class</span>=<span class="str">"btn btn-primary"</span><span class="tag">&gt;</span>Click me<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/div&gt;</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- THE GRID -->
+<div class="section-bg-light py-5">
+  <div class="container">
+    <div class="eyebrow">The Grid System</div>
+    <h2 class="fw-bold mb-2" style="font-size:2rem;">12 Columns, Infinite Layouts</h2>
+    <p class="text-muted mb-4" style="max-width:600px;">Bootstrap divides the page into 12 equal columns. You specify how many columns each element takes — and at which breakpoint the layout changes.</p>
+
+    <!-- Demo Grid -->
+    <div class="comp-block">
+      <div class="component-title">demo — responsive grid</div>
+
+      <div class="row">
+        <div class="col-12"><div class="grid-demo-col">col-12 (full width)</div></div>
+      </div>
+      <div class="row">
+        <div class="col-6"><div class="grid-demo-col">col-6</div></div>
+        <div class="col-6"><div class="grid-demo-col">col-6</div></div>
+      </div>
+      <div class="row">
+        <div class="col-4"><div class="grid-demo-col">col-4</div></div>
+        <div class="col-4"><div class="grid-demo-col">col-4</div></div>
+        <div class="col-4"><div class="grid-demo-col">col-4</div></div>
+      </div>
+      <div class="row">
+        <div class="col-3"><div class="grid-demo-col">col-3</div></div>
+        <div class="col-3"><div class="grid-demo-col">col-3</div></div>
+        <div class="col-3"><div class="grid-demo-col">col-3</div></div>
+        <div class="col-3"><div class="grid-demo-col">col-3</div></div>
+      </div>
+      <div class="row">
+        <div class="col-md-8"><div class="grid-demo-col">col-md-8 (main content)</div></div>
+        <div class="col-md-4"><div class="grid-demo-col">col-md-4 (sidebar)</div></div>
+      </div>
+    </div>
+
+    <!-- Breakpoints -->
+    <div class="comp-block mt-4">
+      <div class="component-title">breakpoints</div>
+      <div class="bp-bar" style="background:#374151; width:100%">xs &lt; 576px — no prefix, applies to all screens</div>
+      <div class="bp-bar" style="background:#1d4ed8; width:95%">sm ≥ 576px — col-sm-*</div>
+      <div class="bp-bar" style="background:#0e7490; width:80%">md ≥ 768px — col-md-*</div>
+      <div class="bp-bar" style="background:#065f46; width:65%">lg ≥ 992px — col-lg-*</div>
+      <div class="bp-bar" style="background:#7c3aed; width:50%">xl ≥ 1200px — col-xl-*</div>
+      <div class="bp-bar" style="background:#92400e; width:38%">xxl ≥ 1400px — col-xxl-*</div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPONENTS -->
+<div class="section-bg-white py-5">
+  <div class="container">
+    <div class="eyebrow">Components</div>
+    <h2 class="fw-bold mb-2" style="font-size:2rem;">Pre-Built UI Blocks</h2>
+    <p class="text-muted mb-4" style="max-width:600px;">Bootstrap ships with dozens of ready-made components. Below are live demonstrations using actual Bootstrap classes.</p>
+
+    <div class="row g-4">
+
+      <!-- Buttons -->
+      <div class="col-md-6">
+        <div class="comp-block h-100">
+          <div class="component-title">buttons</div>
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            <button class="btn btn-primary">Primary</button>
+            <button class="btn btn-secondary">Secondary</button>
+            <button class="btn btn-success">Success</button>
+            <button class="btn btn-danger">Danger</button>
+            <button class="btn btn-warning">Warning</button>
+            <button class="btn btn-outline-primary">Outline</button>
+            <button class="btn btn-sm btn-primary">Small</button>
+            <button class="btn btn-lg btn-outline-dark">Large</button>
+          </div>
+          <code style="font-size:0.72rem; color:#6366f1;">&lt;button class="btn btn-primary"&gt;</code>
+        </div>
+      </div>
+
+      <!-- Alerts -->
+      <div class="col-md-6">
+        <div class="comp-block h-100">
+          <div class="component-title">alerts</div>
+          <div class="alert alert-primary mb-2">ℹ️ <strong>Info:</strong> This is a primary alert.</div>
+          <div class="alert alert-success mb-2">✅ <strong>Done:</strong> Your changes were saved.</div>
+          <div class="alert alert-danger mb-0">❌ <strong>Error:</strong> Something went wrong.</div>
+        </div>
+      </div>
+
+      <!-- Cards -->
+      <div class="col-12">
+        <div class="component-title">cards</div>
+        <div class="row g-3">
+          <div class="col-sm-4">
+            <div class="card card-showcase h-100">
+              <div class="card-body">
+                <h5 class="card-title">Frontend</h5>
+                <p class="card-text text-muted small">HTML, CSS, JavaScript — what the user sees and interacts with in the browser.</p>
+                <a href="#" class="btn btn-sm btn-primary">Learn more</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card card-showcase h-100">
+              <div class="card-body">
+                <h5 class="card-title">Backend</h5>
+                <p class="card-text text-muted small">Node.js, Python, PHP — the server logic that powers your APIs and data access.</p>
+                <a href="#" class="btn btn-sm btn-secondary">Learn more</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card card-showcase h-100">
+              <div class="card-body">
+                <h5 class="card-title">Database</h5>
+                <p class="card-text text-muted small">MySQL, MongoDB — persistent storage where all application data lives.</p>
+                <a href="#" class="btn btn-sm btn-success">Learn more</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Badges & Progress -->
+      <div class="col-md-6">
+        <div class="comp-block h-100">
+          <div class="component-title">badges</div>
+          <div class="util-row">
+            <span class="badge bg-primary">HTML</span>
+            <span class="badge bg-success">CSS</span>
+            <span class="badge bg-danger">JavaScript</span>
+            <span class="badge bg-warning text-dark">Bootstrap</span>
+            <span class="badge bg-info">New</span>
+            <span class="badge bg-dark">Pro</span>
+          </div>
+          <div class="component-title mt-3">progress bars</div>
+          <div class="progress mb-2" style="height:10px"><div class="progress-bar bg-primary" style="width:85%"></div></div>
+          <div class="progress mb-2" style="height:10px"><div class="progress-bar bg-success" style="width:60%"></div></div>
+          <div class="progress" style="height:10px"><div class="progress-bar bg-warning" style="width:40%"></div></div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="col-md-6">
+        <div class="comp-block h-100">
+          <div class="component-title">table</div>
+          <table class="table table-striped table-hover table-sm table-custom">
+            <thead>
+              <tr><th>Technology</th><th>Type</th><th>Layer</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>HTML</td><td>Markup</td><td>Frontend</td></tr>
+              <tr><td>CSS</td><td>Styling</td><td>Frontend</td></tr>
+              <tr><td>Bootstrap</td><td>Framework</td><td>Frontend</td></tr>
+              <tr><td>JavaScript</td><td>Language</td><td>Frontend / All</td></tr>
+              <tr><td>Node.js</td><td>Runtime</td><td>Backend</td></tr>
+              <tr><td>MySQL</td><td>Database</td><td>Data</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="col-12">
+        <div class="comp-block">
+          <div class="component-title">form — Bootstrap styled</div>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label fw-semibold small">Full Name</label>
+              <input type="text" class="form-control" placeholder="Raj Kumar">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold small">Email</label>
+              <input type="email" class="form-control" placeholder="raj@example.com">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold small">Framework</label>
+              <select class="form-select">
+                <option>Bootstrap</option>
+                <option>Tailwind</option>
+                <option>Bulma</option>
+              </select>
+            </div>
+            <div class="col-12 d-flex gap-2">
+              <button class="btn btn-primary">Submit</button>
+              <button class="btn btn-outline-secondary">Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /row -->
+  </div>
+</div>
+
+<!-- NAVBAR DEMO -->
+<div class="section-bg-light py-5">
+  <div class="container">
+    <div class="eyebrow">Navigation</div>
+    <h2 class="fw-bold mb-4" style="font-size:2rem;">Responsive Navbar</h2>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded-3 px-3">
+      <a class="navbar-brand fw-bold" href="#">MyApp</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#demoNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="demoNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Courses</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+        </ul>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-light btn-sm">Sign In</button>
+          <button class="btn btn-primary btn-sm">Sign Up</button>
+        </div>
+      </div>
+    </nav>
+    <p class="text-muted small mt-3">
+      <code>class="navbar navbar-expand-lg navbar-dark bg-dark"</code> — collapses to a hamburger menu on mobile automatically.
+    </p>
+  </div>
+</div>
+
+<footer-custom>Module 04 — Bootstrap 5 · Next: JavaScript →</footer-custom>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

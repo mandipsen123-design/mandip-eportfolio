@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS — Styling the Web</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #07090f;
+    --surface: #1c2742;
+    --card: #212c46;
+    --border: #1e2a3a;
+    --text: #e8edf5;
+    --muted: #6b7a92;
+    --c1: #ff6b6b;
+    --c2: #ffd93d;
+    --c3: #6bcb77;
+    --c4: #4d96ff;
+    --c5: #c77dff;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 3rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .hero-bg .circle {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.15;
+    animation: drift 8s ease-in-out infinite alternate;
+  }
+
+  .hero-bg .c1 { width: 400px; height: 400px; background: var(--c1); top: -10%; left: -10%; animation-delay: 0s; }
+  .hero-bg .c2 { width: 300px; height: 300px; background: var(--c2); top: 20%; right: 10%; animation-delay: 1s; }
+  .hero-bg .c3 { width: 350px; height: 350px; background: var(--c4); bottom: -10%; left: 30%; animation-delay: 2s; }
+  .hero-bg .c4 { width: 250px; height: 250px; background: var(--c5); bottom: 20%; right: -5%; animation-delay: 0.5s; }
+
+  @keyframes drift {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(20px, -15px) scale(1.05); }
+  }
+
+  .hero-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--c4);
+    background: rgba(77,150,255,0.1);
+    border: 1px solid rgba(77,150,255,0.2);
+    padding: 0.35rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+
+  .hero h1 {
+    font-size: clamp(3.5rem, 10vw, 7rem);
+    font-weight: 900;
+    line-height: 0.9;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .hero h1 .css-c { color: var(--c1); }
+  .hero h1 .css-s { color: var(--c2); }
+  .hero h1 .css-s2 { color: var(--c3); }
+
+  .hero p {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 540px;
+    line-height: 1.7;
+    position: relative;
+  }
+
+  /* CSS RULE ANATOMY */
+  .rule-section {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+  }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--c4);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .desc {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 580px;
+    margin-bottom: 3rem;
+  }
+
+  .rule-anatomy {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem;
+    line-height: 2.4;
+    position: relative;
+    overflow-x: auto;
+  }
+
+  .r-selector { color: var(--c2); }
+  .r-brace    { color: var(--muted); }
+  .r-prop     { color: var(--c4); }
+  .r-colon    { color: var(--muted); }
+  .r-val      { color: var(--c3); }
+  .r-semi     { color: var(--muted); }
+  .r-cm       { color: #374151; font-size: 0.8rem; }
+
+  .rule-labels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .rule-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .rule-swatch {
+    width: 12px; height: 12px;
+    border-radius: 3px;
+  }
+
+  /* SPECIFICITY */
+  .specificity-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 5rem 2rem;
+  }
+
+  .spec-inner {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .spec-pyramid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 520px;
+    margin: 2.5rem auto 0;
+  }
+
+  .spec-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .spec-bar {
+    height: 48px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    padding: 0 1.25rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #fff;
+    flex-grow: 1;
+  }
+
+  .spec-score {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--muted);
+    min-width: 50px;
+    text-align: right;
+  }
+
+  /* BOX MODEL DEMO */
+  .boxmodel-section {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+  }
+
+  .boxmodel-demo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    margin-top: 2.5rem;
+  }
+
+  @media(max-width:680px) { .boxmodel-demo { grid-template-columns: 1fr; } }
+
+  .box-vis {
+    position: relative;
+    background: rgba(199,125,255,0.08);
+    border: 3px dashed rgba(199,125,255,0.4);
+    border-radius: 12px;
+    padding: 32px;
+  }
+
+  .box-margin-label {
+    position: absolute;
+    top: 6px; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: rgba(199,125,255,0.7);
+    letter-spacing: 0.1em;
+  }
+
+  .box-border {
+    background: rgba(77,150,255,0.1);
+    border: 3px solid rgba(77,150,255,0.5);
+    border-radius: 8px;
+    padding: 24px;
+    position: relative;
+  }
+
+  .box-border-label {
+    position: absolute;
+    top: 6px; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: rgba(77,150,255,0.8);
+    letter-spacing: 0.1em;
+  }
+
+  .box-padding {
+    background: rgba(107,203,119,0.1);
+    border: 2px solid rgba(107,203,119,0.3);
+    border-radius: 4px;
+    padding: 20px;
+    position: relative;
+  }
+
+  .box-padding-label {
+    position: absolute;
+    top: 4px; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: rgba(107,203,119,0.8);
+    letter-spacing: 0.1em;
+  }
+
+  .box-content {
+    background: rgba(255,107,107,0.15);
+    border: 2px solid rgba(255,107,107,0.4);
+    border-radius: 3px;
+    padding: 1rem;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--c1);
+    font-weight: 600;
+  }
+
+  .box-legend { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .legend-dot {
+    width: 14px; height: 14px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  .legend-item strong { font-weight: 600; }
+  .legend-item span { color: var(--muted); font-size: 0.82rem; }
+
+  /* LIVE STYLE DEMO */
+  .live-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 5rem 2rem;
+  }
+
+  .live-inner {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .cards-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .style-card {
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  /* Deliberately different CSS styles on each card */
+  .card-shadow {
+    background: var(--card);
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04);
+    color: var(--text);
+  }
+  .card-shadow h4 { font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; color: var(--c4); margin-bottom: 0.5rem; }
+  .card-shadow p  { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+
+  .card-gradient {
+    background: linear-gradient(135deg, #ff6b6b, #ffd93d, #6bcb77);
+    color: #1a1410;
+  }
+  .card-gradient h4 { font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; color: rgba(0,0,0,0.5); margin-bottom: 0.5rem; }
+  .card-gradient p  { font-size: 0.8rem; color: rgba(0,0,0,0.7); line-height: 1.5; }
+
+  .card-glassmorphism {
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text);
+  }
+  .card-glassmorphism h4 { font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; color: var(--c5); margin-bottom: 0.5rem; }
+  .card-glassmorphism p  { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+
+  .card-outline {
+    background: transparent;
+    border: 2px solid var(--c3);
+    color: var(--text);
+  }
+  .card-outline h4 { font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; color: var(--c3); margin-bottom: 0.5rem; }
+  .card-outline p  { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+
+  /* ANIMATIONS */
+  .anim-section {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+  }
+
+  .anim-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .anim-box {
+    height: 120px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    background: var(--card);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .anim-label {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    z-index: 2;
+  }
+
+  /* pulse */
+  .pulse-el {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--c1);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.6; }
+  }
+
+  /* spin */
+  .spin-el {
+    width: 40px; height: 40px;
+    border: 4px solid transparent;
+    border-top-color: var(--c4);
+    border-right-color: var(--c4);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* bounce */
+  .bounce-el {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--c2);
+    animation: bounceUp 1.2s ease infinite;
+    margin-top: -20px;
+  }
+  @keyframes bounceUp {
+    0%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-28px); }
+    60% { transform: translateY(-20px); }
+  }
+
+  /* slide */
+  .slide-el {
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    background: var(--c3);
+    animation: slideBack 2s ease-in-out infinite;
+  }
+  @keyframes slideBack {
+    0%, 100% { transform: translateX(-28px); }
+    50% { transform: translateX(28px); }
+  }
+
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="circle c1"></div>
+    <div class="circle c2"></div>
+    <div class="circle c3"></div>
+    <div class="circle c4"></div>
+  </div>
+  <div class="hero-badge">Module 03 — Presentation</div>
+  <h1><span class="css-c">C</span><span class="css-s">S</span><span class="css-s2">S</span></h1>
+  <p>Cascading Style Sheets transform plain HTML structure into beautiful, responsive, animated interfaces. CSS controls <em>every visual property</em> — colour, spacing, layout, and motion.</p>
+</section>
+
+<!-- RULE ANATOMY -->
+<section class="rule-section">
+  <div class="eyebrow">CSS Syntax</div>
+  <h2 class="section-title">Anatomy of a CSS Rule</h2>
+  <p class="desc">A CSS rule targets an element with a <strong>selector</strong>, then applies <strong>declarations</strong> — each a property–value pair — inside curly braces.</p>
+
+  <div class="rule-anatomy">
+<span class="r-selector">h1</span> <span class="r-brace">{</span>  <span class="r-cm">/* selector targets all &lt;h1&gt; elements */</span>
+  <span class="r-prop">  color</span><span class="r-colon">:</span>         <span class="r-val">#21d4ff</span><span class="r-semi">;</span>  <span class="r-cm">/* property: value */</span>
+  <span class="r-prop">  font-size</span><span class="r-colon">:</span>     <span class="r-val">2.5rem</span><span class="r-semi">;</span>
+  <span class="r-prop">  font-weight</span><span class="r-colon">:</span>   <span class="r-val">700</span><span class="r-semi">;</span>
+  <span class="r-prop">  margin-bottom</span><span class="r-colon">: </span><span class="r-val">1rem</span><span class="r-semi">;</span>
+  <span class="r-prop">  text-align</span><span class="r-colon">:</span>    <span class="r-val">center</span><span class="r-semi">;</span>
+<span class="r-brace">}</span>
+  </div>
+
+  <div class="rule-labels">
+    <div class="rule-label"><div class="rule-swatch" style="background:var(--c2)"></div><span>Selector — targets HTML elements</span></div>
+    <div class="rule-label"><div class="rule-swatch" style="background:var(--c4)"></div><span>Property — what to style</span></div>
+    <div class="rule-label"><div class="rule-swatch" style="background:var(--c3)"></div><span>Value — how to style it</span></div>
+  </div>
+</section>
+
+<!-- SPECIFICITY -->
+<section class="specificity-section">
+  <div class="spec-inner">
+    <div class="eyebrow">Cascading Rules</div>
+    <h2 class="section-title">Specificity Hierarchy</h2>
+    <p class="desc">When multiple rules target the same element, CSS uses a specificity score to decide which wins. Higher specificity always overrides lower.</p>
+
+    <div class="spec-pyramid">
+      <div class="spec-row">
+        <div class="spec-bar" style="background:#7c3aed; width:100%">style="" attribute (inline)</div>
+        <div class="spec-score">1-0-0-0</div>
+      </div>
+      <div class="spec-row">
+        <div class="spec-bar" style="background:#1d4ed8; width:85%">#id selector</div>
+        <div class="spec-score">0-1-0-0</div>
+      </div>
+      <div class="spec-row">
+        <div class="spec-bar" style="background:#0e7490; width:65%">.class / [attr] / :pseudo-class</div>
+        <div class="spec-score">0-0-1-0</div>
+      </div>
+      <div class="spec-row">
+        <div class="spec-bar" style="background:#065f46; width:45%">element tag (div, h1, p)</div>
+        <div class="spec-score">0-0-0-1</div>
+      </div>
+      <div class="spec-row">
+        <div class="spec-bar" style="background:#374151; width:28%">* universal selector</div>
+        <div class="spec-score">0-0-0-0</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOX MODEL -->
+<section class="boxmodel-section">
+  <div class="eyebrow">Layout Fundamentals</div>
+  <h2 class="section-title">The Box Model</h2>
+  <p class="desc">Every HTML element is a rectangular box. CSS controls four layers around the content: padding, border, and margin. Understanding this is essential for precise layout control.</p>
+
+  <div class="boxmodel-demo">
+    <div class="box-vis">
+      <div class="box-margin-label">MARGIN</div>
+      <div class="box-border">
+        <div class="box-border-label">BORDER</div>
+        <div class="box-padding">
+          <div class="box-padding-label">PADDING</div>
+          <div class="box-content">CONTENT</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="box-legend">
+      <div class="legend-item">
+        <div class="legend-dot" style="background:rgba(199,125,255,0.5); border: 2px dashed rgba(199,125,255,0.6)"></div>
+        <div>
+          <strong>Margin</strong><br>
+          <span>Space outside the element — separates it from neighbours</span>
+        </div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:rgba(77,150,255,0.4); border: 2px solid rgba(77,150,255,0.6)"></div>
+        <div>
+          <strong>Border</strong><br>
+          <span>Optional line around the element — can be coloured, styled</span>
+        </div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:rgba(107,203,119,0.3); border: 2px solid rgba(107,203,119,0.4)"></div>
+        <div>
+          <strong>Padding</strong><br>
+          <span>Space inside the element, between content and border</span>
+        </div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:rgba(255,107,107,0.3); border: 2px solid rgba(255,107,107,0.5)"></div>
+        <div>
+          <strong>Content</strong><br>
+          <span>The actual text, image, or child elements</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VISUAL STYLES DEMO -->
+<section class="live-section">
+  <div class="live-inner">
+    <div class="eyebrow">Live Demo</div>
+    <h2 class="section-title">CSS Visual Techniques</h2>
+    <p class="desc">The same HTML structure, four completely different CSS treatments. This is the power of separating content from presentation.</p>
+
+    <div class="cards-row">
+      <div class="style-card card-shadow">
+        <h4>box-shadow</h4>
+        <p>Layered shadows create depth and elevation — the material design technique.</p>
+      </div>
+      <div class="style-card card-gradient">
+        <h4>linear-gradient</h4>
+        <p>CSS gradients blend multiple colours — no images needed, fully scalable.</p>
+      </div>
+      <div class="style-card card-glassmorphism">
+        <h4>backdrop-filter</h4>
+        <p>Glassmorphism uses blur and transparency to create frosted-glass panels.</p>
+      </div>
+      <div class="style-card card-outline">
+        <h4>border-only</h4>
+        <p>A minimal outline style — clean, high-contrast, no background fill.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ANIMATIONS -->
+<section class="anim-section">
+  <div class="eyebrow">CSS Animations</div>
+  <h2 class="section-title">Motion with @keyframes</h2>
+  <p class="desc">CSS animations use <code style="color:var(--c4); font-family:'JetBrains Mono',monospace">@keyframes</code> to define states, and the <code style="color:var(--c4); font-family:'JetBrains Mono',monospace">animation</code> property to apply them. No JavaScript needed.</p>
+
+  <div class="anim-grid">
+    <div class="anim-box">
+      <div class="pulse-el"></div>
+      <div class="anim-label">animation: pulse</div>
+    </div>
+    <div class="anim-box">
+      <div class="spin-el"></div>
+      <div class="anim-label">animation: spin</div>
+    </div>
+    <div class="anim-box">
+      <div class="bounce-el"></div>
+      <div class="anim-label">animation: bounce</div>
+    </div>
+    <div class="anim-box">
+      <div class="slide-el"></div>
+      <div class="anim-label">animation: slide</div>
+    </div>
+  </div>
+</section>
+
+<footer>Module 03 — CSS · Next: Bootstrap Framework →</footer>
+</body>
+</html>

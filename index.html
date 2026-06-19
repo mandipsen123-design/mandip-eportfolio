@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mandip Sen - Full Stack Development ePortfolio</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family: Arial, sans-serif;
+    background:#434c5c;
+    color:#333;
+    line-height:1.6;
+}
+
+/* Navigation */
+
+nav{
+    background:white;
+    padding:15px 50px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #ddd;
+    position:sticky;
+    top:0;
+}
+
+.logo{
+    font-size:24px;
+    font-weight:bold;
+    color:#2563eb;
+}
+
+nav ul{
+    display:flex;
+    list-style:none;
+}
+
+nav ul li{
+    margin-left:20px;
+}
+
+nav ul li a{
+    text-decoration:none;
+    color:#333;
+    font-weight:bold;
+}
+
+nav ul li a:hover{
+    color:#2563eb;
+}
+
+/* Hero */
+
+.hero{
+    text-align:center;
+    padding:80px 20px;
+    background:white;
+}
+
+.avatar{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    background:#2563eb;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:50px;
+    margin:auto;
+}
+
+.hero h1{
+    margin-top:20px;
+    font-size:48px;
+}
+
+.hero p{
+    max-width:700px;
+    margin:20px auto;
+    color:#555;
+}
+
+.hero-btn{
+    display:inline-block;
+    background:#2563eb;
+    color:white;
+    padding:12px 25px;
+    text-decoration:none;
+    border-radius:5px;
+    margin-top:15px;
+}
+
+.hero-btn:hover{
+    background:#1d4ed8;
+}
+
+/* Modules */
+
+.modules{
+    max-width:1200px;
+    margin:auto;
+    padding:60px 20px;
+}
+
+.modules h2{
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.modules p{
+    text-align:center;
+    margin-bottom:40px;
+    color:#666;
+}
+
+.card-container{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:25px;
+}
+
+.card{
+    background:white;
+    border-radius:12px;
+    padding:25px;
+    border:1px solid #ddd;
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.card h3{
+    color:#2563eb;
+    margin-bottom:10px;
+}
+
+.card p{
+    text-align:left;
+    margin-bottom:15px;
+}
+
+.card a{
+    text-decoration:none;
+    color:white;
+    background:#2563eb;
+    padding:10px 18px;
+    border-radius:5px;
+    display:inline-block;
+}
+
+.card a:hover{
+    background:#1d4ed8;
+}
+
+/* Footer */
+
+footer{
+    text-align:center;
+    padding:30px;
+    background:white;
+    border-top:1px solid #ddd;
+    margin-top:50px;
+}
+
+footer h3{
+    color:#2563eb;
+}
+
+@media(max-width:768px){
+
+nav{
+    flex-direction:column;
+}
+
+nav ul{
+    margin-top:10px;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+
+.hero h1{
+    font-size:36px;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+
+<nav>
+    <div class="logo">Mandip Sen</div>
+
+    <ul>
+        <li><a href="fullstack.html">Full Stack</a></li>
+        <li><a href="html.html">HTML</a></li>
+        <li><a href="css.html">CSS</a></li>
+        <li><a href="bootstrap.html">Bootstrap</a></li>
+        <li><a href="javascript.html">JavaScript</a></li>
+    </ul>
+</nav>
+
+<!-- Hero Section -->
+
+<section class="hero">
+
+    <div class="avatar">👨‍💻</div>
+
+    <h1>Mandip Sen</h1>
+
+    <h3>Full Stack Development ePortfolio</h3>
+
+    <p>
+        Welcome to my ePortfolio for the Full Stack Development module.
+        This portfolio demonstrates my understanding of HTML, CSS,
+        Bootstrap, JavaScript and Full Stack Development concepts.
+        Each section contains explanations, examples and practical
+        demonstrations of the skills I have learned throughout the module.
+    </p>
+
+    <a href="#modules" class="hero-btn">View Portfolio</a>
+
+</section>
+
+<!-- Modules -->
+
+<section class="modules" id="modules">
+
+    <h2>Portfolio Sections</h2>
+
+    <p>
+        Click on any section below to explore my work and demonstrations.
+    </p>
+
+    <div class="card-container">
+
+        <div class="card">
+            <h3>1. Full Stack Development</h3>
+
+            <p>
+                Learn about frontend, backend, databases,
+                APIs and how modern web applications work.
+            </p>
+
+            <a href="fullstack.html">Open Section</a>
+        </div>
+
+        <div class="card">
+            <h3>2. HTML</h3>
+
+            <p>
+                Understanding page structure, semantic tags,
+                forms, tables and accessibility.
+            </p>
+
+            <a href="html.html">Open Section</a>
+        </div>
+
+        <div class="card">
+            <h3>3. CSS</h3>
+
+            <p>
+                Styling web pages using selectors,
+                layouts, Flexbox, Grid and animations.
+            </p>
+
+            <a href="css.html">Open Section</a>
+        </div>
+
+        <div class="card">
+            <h3>4. Bootstrap</h3>
+
+            <p>
+                Creating responsive websites using Bootstrap's
+                grid system and pre-built components.
+            </p>
+
+            <a href="bootstrap.html">Open Section</a>
+        </div>
+
+        <div class="card">
+            <h3>5. JavaScript</h3>
+
+            <p>
+                Adding interactivity through variables,
+                functions, events and DOM manipulation.
+            </p>
+
+            <a href="javascript.html">Open Section</a>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- Footer -->
+
+<footer>
+
+    <h3>Mandip Sen</h3>
+
+    <p>BSc Computing Student</p>
+
+    <p>Full Stack Development ePortfolio - Academic Year 2025/26</p>
+
+</footer>
+
+</body>
+</html>

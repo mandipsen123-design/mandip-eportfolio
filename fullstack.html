@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Full Stack Development</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #b6c4c7;
+    --surface: #111727;
+    --border: #1f2d45;
+    --front: #21d4ff;
+    --back: #a855f7;
+    --db: #f97316;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --accent: #21d4ff;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 50%, rgba(33,212,255,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 50%, rgba(168,85,247,0.12) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .hero-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--front);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    opacity: 0.8;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    font-weight: 700;
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #21d4ff 0%, #a855f7 50%, #f97316 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    animation: bounce 2s infinite;
+  }
+  .scroll-hint::after {
+    content: '↓';
+    font-size: 1.2rem;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(6px); }
+  }
+
+  /* STACK DIAGRAM */
+  .diagram-section {
+    padding: 5rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
+  .section-desc {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+  }
+
+  /* LAYER CARDS */
+  .stack-layers {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+
+  .stack-layers::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--front), var(--back), var(--db));
+    transform: translateX(-50%);
+    opacity: 0.3;
+  }
+
+  .layer {
+    display: grid;
+    grid-template-columns: 1fr 60px 1fr;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 0;
+  }
+
+  .layer-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .layer-card:hover { transform: translateY(-3px); }
+
+  .layer-card.frontend { border-color: rgba(33,212,255,0.3); }
+  .layer-card.frontend:hover { border-color: var(--front); }
+
+  .layer-card.backend { border-color: rgba(168,85,247,0.3); }
+  .layer-card.backend:hover { border-color: var(--back); }
+
+  .layer-card.database { border-color: rgba(249,115,22,0.3); }
+  .layer-card.database:hover { border-color: var(--db); }
+
+  .layer-icon {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    background: var(--bg);
+    border: 2px solid var(--border);
+  }
+
+  .layer-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .layer-card.frontend h3 { color: var(--front); }
+  .layer-card.backend h3 { color: var(--back); }
+  .layer-card.database h3 { color: var(--db); }
+
+  .layer-card p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+  }
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid;
+  }
+  .frontend .tag { border-color: rgba(33,212,255,0.3); color: var(--front); background: rgba(33,212,255,0.05); }
+  .backend .tag { border-color: rgba(168,85,247,0.3); color: var(--back); background: rgba(168,85,247,0.05); }
+  .database .tag { border-color: rgba(249,115,22,0.3); color: var(--db); background: rgba(249,115,22,0.05); }
+
+  /* REQUEST FLOW */
+  .flow-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 5rem 2rem;
+    margin: 4rem 0;
+  }
+
+  .flow-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .flow-steps {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 3rem;
+    position: relative;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .flow-step {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+    position: relative;
+  }
+
+  .flow-step:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 1.2rem;
+  }
+
+  .flow-bubble {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    margin: 0 auto 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    border: 2px solid var(--border);
+    background: var(--bg);
+    position: relative;
+  }
+
+  .flow-bubble.active {
+    animation: pulse-glow 2s infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(33,212,255,0.3); border-color: var(--front); }
+    50% { box-shadow: 0 0 20px 4px rgba(33,212,255,0.15); border-color: var(--front); }
+  }
+
+  .flow-step h4 {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.3rem;
+  }
+  .flow-step p {
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+
+  /* ROLES */
+  .roles-section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+
+  .roles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .role-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .role-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .role-card.fe::before { background: var(--front); }
+  .role-card.be::before { background: var(--back); }
+  .role-card.fs::before { background: linear-gradient(to right, var(--front), var(--back)); }
+
+  .role-emoji { font-size: 2rem; margin-bottom: 1rem; }
+  .role-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text); }
+  .role-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+  /* LIVE DEMO */
+  .demo-section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+  }
+
+  .demo-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-top: 2rem;
+  }
+
+  .demo-bar {
+    background: #1a2236;
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .demo-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .demo-dot.r { background: #ff5f57; }
+  .demo-dot.y { background: #febc2e; }
+  .demo-dot.g { background: #28c840; }
+
+  .demo-title { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--muted); margin-left: 0.5rem; }
+
+  .demo-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 340px;
+  }
+
+  @media (max-width: 600px) { .demo-content { grid-template-columns: 1fr; } }
+
+  .demo-pane {
+    padding: 1.5rem;
+  }
+
+  .demo-pane + .demo-pane {
+    border-left: 1px solid var(--border);
+  }
+
+  .demo-pane h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .demo-pane pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: #a0c4ff;
+    line-height: 1.8;
+    white-space: pre-wrap;
+  }
+
+  .demo-pane pre .kw { color: #c792ea; }
+  .demo-pane pre .fn { color: #82aaff; }
+  .demo-pane pre .str { color: #c3e88d; }
+  .demo-pane pre .cm { color: var(--muted); }
+  .demo-pane pre .num { color: #f78c6c; }
+
+  .api-output {
+    background: #0d1117;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .api-key { color: #79b8ff; }
+  .api-val { color: #9ecbff; }
+  .api-str { color: #85e89d; }
+  .api-num { color: #f97316; }
+  .api-bool { color: #a855f7; }
+
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-label">Module 01 — Foundations</div>
+  <h1>Full Stack<br>Development</h1>
+  <p>Building complete web applications — from the pixels a user taps to the database that stores their data. One developer, every layer.</p>
+  <div class="scroll-hint">scroll</div>
+</section>
+
+<!-- STACK LAYERS -->
+<section class="diagram-section">
+  <div class="section-label">The Stack</div>
+  <h2 class="section-title">Three Layers, One Application</h2>
+  <p class="section-desc">
+    A "stack" is the combination of technologies used to build a complete web application. Each layer has a specific role, and full-stack developers understand all three.
+  </p>
+
+  <div class="stack-layers">
+    <!-- Frontend -->
+    <div class="layer">
+      <div class="layer-card frontend">
+        <h3>Frontend</h3>
+        <p>Everything a user sees and interacts with — rendered in the browser. The UI, layouts, animations, and client-side logic.</p>
+        <div class="tag-list">
+          <span class="tag">HTML</span>
+          <span class="tag">CSS</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">React</span>
+          <span class="tag">Vue</span>
+        </div>
+      </div>
+      <div class="layer-icon">🖥️</div>
+      <div style="opacity:0"></div>
+    </div>
+
+    <!-- Backend -->
+    <div class="layer">
+      <div style="opacity:0"></div>
+      <div class="layer-icon">⚙️</div>
+      <div class="layer-card backend">
+        <h3>Backend</h3>
+        <p>Server-side logic that processes requests, enforces business rules, and returns data to the frontend via APIs.</p>
+        <div class="tag-list">
+          <span class="tag">Node.js</span>
+          <span class="tag">Python</span>
+          <span class="tag">PHP</span>
+          <span class="tag">REST API</span>
+          <span class="tag">GraphQL</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Database -->
+    <div class="layer">
+      <div class="layer-card database">
+        <h3>Database</h3>
+        <p>Persistent storage for all application data — users, content, orders. The long-term memory of the application.</p>
+        <div class="tag-list">
+          <span class="tag">MySQL</span>
+          <span class="tag">PostgreSQL</span>
+          <span class="tag">MongoDB</span>
+          <span class="tag">Redis</span>
+        </div>
+      </div>
+      <div class="layer-icon">🗄️</div>
+      <div style="opacity:0"></div>
+    </div>
+  </div>
+</section>
+
+<!-- REQUEST FLOW -->
+<section class="flow-section">
+  <div class="flow-inner">
+    <div class="section-label">How It Works</div>
+    <h2 class="section-title">The Request–Response Cycle</h2>
+    <p class="section-desc">Every time you load a web page, this exact flow happens in milliseconds.</p>
+
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-bubble active">👤</div>
+        <h4>User</h4>
+        <p>Opens browser, clicks a link</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-bubble">🌐</div>
+        <h4>Browser</h4>
+        <p>Sends HTTP request</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-bubble">⚙️</div>
+        <h4>Server</h4>
+        <p>Processes the request</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-bubble">🗄️</div>
+        <h4>Database</h4>
+        <p>Returns queried data</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-bubble">📦</div>
+        <h4>Response</h4>
+        <p>JSON/HTML sent back</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-bubble">✅</div>
+        <h4>Rendered</h4>
+        <p>Page displays to user</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROLES -->
+<section class="roles-section">
+  <div class="section-label">Career Paths</div>
+  <h2 class="section-title">Developer Roles</h2>
+
+  <div class="roles-grid">
+    <div class="role-card fe">
+      <div class="role-emoji">🎨</div>
+      <h3>Frontend Developer</h3>
+      <p>Specialises in UI/UX, visual design, browser APIs, and user interaction. Masters HTML, CSS, and JavaScript frameworks.</p>
+    </div>
+    <div class="role-card be">
+      <div class="role-emoji">🔧</div>
+      <h3>Backend Developer</h3>
+      <p>Builds APIs, manages databases, handles authentication, and ensures the server-side logic is secure and scalable.</p>
+    </div>
+    <div class="role-card fs">
+      <div class="role-emoji">⚡</div>
+      <h3>Full Stack Developer</h3>
+      <p>Works across all layers. Can build an entire feature from database schema to polished UI — the most versatile role.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE CODE DEMO -->
+<section class="demo-section">
+  <div class="section-label">Live Example</div>
+  <h2 class="section-title">A Request in Code</h2>
+  <p class="section-desc">This demonstrates how a frontend fetch call maps to a backend handler, which queries a database and returns JSON data.</p>
+
+  <div class="demo-box">
+    <div class="demo-bar">
+      <div class="demo-dot r"></div>
+      <div class="demo-dot y"></div>
+      <div class="demo-dot g"></div>
+      <span class="demo-title">full-stack-example · frontend.js & server.js</span>
+    </div>
+    <div class="demo-content">
+      <div class="demo-pane">
+        <h4>🖥️ Frontend (browser)</h4>
+        <pre>
+<span class="cm">// User clicks "Load Profile"</span>
+<span class="kw">async function</span> <span class="fn">loadProfile</span>(userId) {
+  <span class="kw">const</span> res = <span class="kw">await</span> fetch(
+    <span class="str">`/api/users/${userId}`</span>
+  );
+
+  <span class="kw">const</span> data = <span class="kw">await</span> res.json();
+
+  <span class="cm">// Update the DOM</span>
+  document
+    .querySelector(<span class="str">'#name'</span>)
+    .textContent = data.name;
+}
+
+<span class="fn">loadProfile</span>(<span class="num">42</span>);
+        </pre>
+      </div>
+      <div class="demo-pane">
+        <h4>⚙️ Backend Response (JSON)</h4>
+        <div class="api-output">
+          <pre style="color:#e2e8f0; font-family:'JetBrains Mono',monospace; font-size:0.78rem; line-height:1.8;">{
+  <span class="api-key">"id"</span>:    <span class="api-num">42</span>,
+  <span class="api-key">"name"</span>:  <span class="api-str">"Priya Sharma"</span>,
+  <span class="api-key">"role"</span>:  <span class="api-str">"Full Stack Dev"</span>,
+  <span class="api-key">"posts"</span>: <span class="api-num">128</span>,
+  <span class="api-key">"active"</span>:<span class="api-bool"> true</span>,
+  <span class="api-key">"stack"</span>: [
+    <span class="api-str">"React"</span>,
+    <span class="api-str">"Node.js"</span>,
+    <span class="api-str">"PostgreSQL"</span>
+  ]
+}</pre>
+        </div>
+        <p style="color:var(--muted); font-size:0.75rem; margin-top:1rem; line-height:1.6;">
+          The backend queries the database with <code style="color:var(--front); font-family:'JetBrains Mono',monospace;">SELECT * FROM users WHERE id = 42</code>, serialises the row to JSON, and returns it with status <code style="color:var(--front); font-family:'JetBrains Mono',monospace;">200 OK</code>.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>Module 01 — Full Stack Development · Next: HTML Structure →</footer>
+
+</body>
+</html>

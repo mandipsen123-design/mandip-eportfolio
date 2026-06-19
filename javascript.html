@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JavaScript — The Language of the Web</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --card: #1c1c1c;
+    --border: #2a2a2a;
+    --text: #f0f0f0;
+    --muted: #666;
+    --js-yellow: #f7df1e;
+    --js-dark: #1a1a1a;
+    --green: #4ade80;
+    --blue: #60a5fa;
+    --purple: #c084fc;
+    --pink: #f472b6;
+    --orange: #fb923c;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 3rem 2rem;
+    background: var(--js-dark);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .js-logo {
+    width: 120px; height: 120px;
+    background: var(--js-yellow);
+    border-radius: 16px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 0.8rem;
+    margin: 0 auto 2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: var(--js-dark);
+    box-shadow: 0 0 60px rgba(247,223,30,0.3);
+    animation: glow-logo 3s ease-in-out infinite;
+  }
+
+  @keyframes glow-logo {
+    0%, 100% { box-shadow: 0 0 40px rgba(247,223,30,0.25); }
+    50% { box-shadow: 0 0 80px rgba(247,223,30,0.5); }
+  }
+
+  .hero-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--js-yellow);
+    background: rgba(247,223,30,0.1);
+    border: 1px solid rgba(247,223,30,0.2);
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 2rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-weight: 900;
+    color: var(--text);
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 em { color: var(--js-yellow); font-style: normal; }
+
+  .hero p {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 540px;
+    line-height: 1.7;
+  }
+
+  /* LAYOUT */
+  .section { max-width: 960px; margin: 0 auto; padding: 5rem 2rem; }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--js-yellow);
+    margin-bottom: 0.75rem;
+  }
+
+  h2.title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .desc {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 600px;
+    margin-bottom: 2.5rem;
+  }
+
+  /* CODE BLOCKS */
+  .code-block {
+    background: #111;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.9;
+    overflow-x: auto;
+    position: relative;
+  }
+
+  .code-block .cb-label {
+    position: absolute;
+    top: 0.75rem; right: 1rem;
+    font-size: 0.65rem;
+    color: #333;
+    letter-spacing: 0.1em;
+  }
+
+  .kw  { color: #c084fc; }
+  .fn  { color: #60a5fa; }
+  .str { color: #4ade80; }
+  .num { color: #fb923c; }
+  .cm  { color: #444; }
+  .op  { color: #f7df1e; }
+  .obj { color: #f472b6; }
+
+  /* CONCEPTS GRID */
+  .concepts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .concept-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .concept-card:hover { border-color: var(--js-yellow); transform: translateY(-2px); }
+
+  .concept-card .c-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+  .concept-card h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text); }
+  .concept-card p { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+
+  /* INTERACTIVE DEMOS */
+  .demo-area {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 5rem 2rem;
+  }
+
+  .demo-area .section { padding-top: 0; padding-bottom: 0; }
+
+  .demo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 2.5rem;
+  }
+
+  @media(max-width:680px) { .demo-grid { grid-template-columns: 1fr; } }
+
+  .demo-panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .demo-panel-header {
+    background: #111;
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot.r { background: #ff5f57; }
+  .dot.y { background: #febc2e; }
+  .dot.g { background: #28c840; }
+
+  .demo-panel-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-left: 0.4rem;
+  }
+
+  .demo-panel-body {
+    padding: 1.5rem;
+  }
+
+  /* COUNTER */
+  .counter-display {
+    font-size: 4rem;
+    font-weight: 900;
+    text-align: center;
+    color: var(--js-yellow);
+    font-family: 'JetBrains Mono', monospace;
+    margin: 1rem 0;
+    transition: transform 0.1s;
+  }
+
+  .counter-display.bump { transform: scale(1.1); }
+
+  .counter-btns {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+
+  .js-btn {
+    background: var(--js-yellow);
+    color: var(--js-dark);
+    border: none;
+    padding: 0.55rem 1.2rem;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .js-btn:hover { opacity: 0.85; }
+  .js-btn.outline { background: transparent; color: var(--js-yellow); border: 2px solid var(--js-yellow); }
+
+  /* TO-DO LIST */
+  .todo-input-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .todo-input {
+    flex: 1;
+    background: #111;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.55rem 0.9rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text);
+    outline: none;
+  }
+
+  .todo-input:focus { border-color: var(--js-yellow); }
+
+  .todo-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .todo-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: #111;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.88rem;
+    transition: opacity 0.2s;
+  }
+
+  .todo-item.done { opacity: 0.4; text-decoration: line-through; }
+
+  .todo-item input[type="checkbox"] { accent-color: var(--js-yellow); width: 16px; height: 16px; cursor: pointer; }
+
+  .todo-delete {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: #444;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: color 0.2s;
+  }
+  .todo-delete:hover { color: #ff5f57; }
+
+  /* COLOUR MIXER */
+  .mixer-preview {
+    height: 100px;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    transition: background 0.3s;
+    border: 1px solid var(--border);
+  }
+
+  .mixer-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .mixer-row label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    width: 30px;
+  }
+
+  .mixer-row input[type="range"] {
+    flex: 1;
+    accent-color: var(--js-yellow);
+    cursor: pointer;
+  }
+
+  .mixer-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--js-yellow);
+    width: 30px;
+    text-align: right;
+  }
+
+  /* QUIZ */
+  .quiz-q {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .quiz-btn {
+    background: #111;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    color: var(--text);
+    font-size: 0.88rem;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'DM Sans', sans-serif;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .quiz-btn:hover { border-color: var(--js-yellow); }
+  .quiz-btn.correct { background: rgba(74,222,128,0.15); border-color: var(--green); color: var(--green); }
+  .quiz-btn.wrong { background: rgba(255,95,87,0.15); border-color: #ff5f57; color: #ff5f57; }
+
+  .quiz-result {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    min-height: 1.2rem;
+    transition: opacity 0.2s;
+  }
+
+  /* DOM SECTION */
+  .dom-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 2rem;
+    margin-top: 2.5rem;
+  }
+
+  .dom-tree {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 2;
+    color: var(--text);
+    margin: 1.5rem 0;
+  }
+
+  .dom-tree .node { padding-left: 1.5rem; }
+  .dom-tree .node2 { padding-left: 3rem; }
+  .dom-tree .node3 { padding-left: 4.5rem; }
+  .dom-tree .tag-col { color: #f97316; }
+  .dom-tree .txt-col { color: var(--green); }
+  .dom-tree .target { color: var(--js-yellow); font-weight: 700; }
+
+  .dom-output {
+    background: #111;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--green);
+    min-height: 60px;
+    line-height: 1.7;
+  }
+
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="js-logo">JS</div>
+  <div class="hero-badge">Module 05 — The Language</div>
+  <h1>Java<em>Script</em></h1>
+  <p>The only programming language native to the browser. JavaScript adds interactivity, logic, and dynamic behaviour to your HTML and CSS — making pages come alive.</p>
+</section>
+
+<!-- CORE CONCEPTS -->
+<section class="section">
+  <div class="eyebrow">Fundamentals</div>
+  <h2 class="title">Core Concepts</h2>
+  <p class="desc">JavaScript is a high-level, interpreted language with dynamic typing. These are the building blocks every JS developer uses daily.</p>
+
+  <div class="concepts-grid">
+    <div class="concept-card">
+      <div class="c-icon">📦</div>
+      <h4>Variables</h4>
+      <p><code style="color:var(--purple)">let</code>, <code style="color:var(--purple)">const</code>, <code style="color:var(--purple)">var</code> — store values that can be referenced and manipulated.</p>
+    </div>
+    <div class="concept-card">
+      <div class="c-icon">🔢</div>
+      <h4>Data Types</h4>
+      <p>String, Number, Boolean, Array, Object, null, undefined — the kinds of values JS can work with.</p>
+    </div>
+    <div class="concept-card">
+      <div class="c-icon">⚡</div>
+      <h4>Functions</h4>
+      <p>Reusable blocks of code. Arrow functions (<code style="color:var(--js-yellow)">=></code>) are the modern syntax for concise definitions.</p>
+    </div>
+    <div class="concept-card">
+      <div class="c-icon">🔀</div>
+      <h4>Control Flow</h4>
+      <p><code style="color:var(--purple)">if/else</code>, <code style="color:var(--purple)">for</code>, <code style="color:var(--purple)">while</code> — logic that determines what code runs under what conditions.</p>
+    </div>
+    <div class="concept-card">
+      <div class="c-icon">🌲</div>
+      <h4>DOM</h4>
+      <p>The Document Object Model — JS's interface to read and modify HTML elements in real time.</p>
+    </div>
+    <div class="concept-card">
+      <div class="c-icon">👂</div>
+      <h4>Events</h4>
+      <p>React to user actions — clicks, keypresses, scrolls — by attaching event listeners.</p>
+    </div>
+    <div class="concept-card">
+      <div class="c-icon">⏳</div>
+      <h4>Async / Await</h4>
+      <p>Handle asynchronous operations (API calls, file reads) without blocking the main thread.</p>
+    </div>
+    <div class="concept-card">
+      <div class="c-icon">📡</div>
+      <h4>Fetch API</h4>
+      <p>Request data from servers and update the page without a full reload — the foundation of modern SPAs.</p>
+    </div>
+  </div>
+
+  <!-- Code Samples -->
+  <div class="code-block" style="margin-bottom:1rem">
+    <span class="cb-label">variables & types</span>
+<span class="kw">const</span> name    <span class="op">=</span> <span class="str">"Priya"</span><span class="cm">;         // String</span>
+<span class="kw">let</span>   score   <span class="op">=</span> <span class="num">98</span><span class="cm">;             // Number</span>
+<span class="kw">const</span> isAdmin <span class="op">=</span> <span class="kw">true</span><span class="cm">;           // Boolean</span>
+<span class="kw">const</span> skills  <span class="op">=</span> [<span class="str">"HTML"</span>, <span class="str">"CSS"</span>, <span class="str">"JS"</span>]<span class="cm">; // Array</span>
+<span class="kw">const</span> user    <span class="op">=</span> { name, score, isAdmin }<span class="cm">; // Object</span>
+  </div>
+
+  <div class="code-block" style="margin-bottom:1rem">
+    <span class="cb-label">functions & arrow syntax</span>
+<span class="cm">// Traditional function</span>
+<span class="kw">function</span> <span class="fn">greet</span>(name) {
+  <span class="kw">return</span> <span class="str">`Hello, ${name}!`</span>;
+}
+
+<span class="cm">// Arrow function (modern)</span>
+<span class="kw">const</span> <span class="fn">greet</span> <span class="op">=</span> (name) <span class="op">=></span> <span class="str">`Hello, ${name}!`</span>;
+
+<span class="cm">// With array methods</span>
+<span class="kw">const</span> doubled <span class="op">=</span> [<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>].<span class="fn">map</span>(n <span class="op">=></span> n <span class="op">*</span> <span class="num">2</span>); <span class="cm">// [2, 4, 6]</span>
+  </div>
+
+  <div class="code-block">
+    <span class="cb-label">async / fetch</span>
+<span class="kw">async function</span> <span class="fn">getUser</span>(id) {
+  <span class="kw">const</span> res  <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">`/api/users/${id}`</span>);
+  <span class="kw">const</span> data <span class="op">=</span> <span class="kw">await</span> res.<span class="fn">json</span>();
+  <span class="kw">return</span> data;
+}
+
+<span class="cm">// Call it and update the DOM</span>
+<span class="fn">getUser</span>(<span class="num">1</span>).<span class="fn">then</span>(user <span class="op">=></span> {
+  document.<span class="fn">querySelector</span>(<span class="str">'#greeting'</span>).textContent
+    <span class="op">=</span> <span class="str">`Welcome, ${user.name}`</span>;
+});
+  </div>
+</section>
+
+<!-- INTERACTIVE DEMOS -->
+<section class="demo-area">
+  <div class="section">
+    <div class="eyebrow">Live Interactive Demos</div>
+    <h2 class="title">JavaScript in Action</h2>
+    <p class="desc">Every element below is powered by vanilla JavaScript running live in your browser. Click, type, and interact.</p>
+
+    <div class="demo-grid">
+
+      <!-- COUNTER -->
+      <div class="demo-panel">
+        <div class="demo-panel-header">
+          <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+          <span class="demo-panel-title">counter.js — state & events</span>
+        </div>
+        <div class="demo-panel-body">
+          <p style="font-size:0.8rem; color:var(--muted); margin-bottom:0.5rem;">Variables hold state. Events trigger updates.</p>
+          <div class="counter-display" id="counterDisplay">0</div>
+          <div class="counter-btns">
+            <button class="js-btn outline" onclick="changeCount(-1)">−</button>
+            <button class="js-btn" onclick="changeCount(1)">+</button>
+            <button class="js-btn outline" onclick="resetCount()">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TO-DO LIST -->
+      <div class="demo-panel">
+        <div class="demo-panel-header">
+          <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+          <span class="demo-panel-title">todo.js — arrays & DOM</span>
+        </div>
+        <div class="demo-panel-body">
+          <p style="font-size:0.8rem; color:var(--muted); margin-bottom:0.75rem;">Add tasks. JS updates the DOM in real time.</p>
+          <div class="todo-input-row">
+            <input class="todo-input" id="todoInput" placeholder="Add a task..." onkeydown="if(event.key==='Enter') addTodo()">
+            <button class="js-btn" onclick="addTodo()">Add</button>
+          </div>
+          <ul class="todo-list" id="todoList">
+            <li class="todo-item"><input type="checkbox" onchange="toggleTodo(this)"><span>Learn HTML</span><button class="todo-delete" onclick="deleteTodo(this)">✕</button></li>
+            <li class="todo-item"><input type="checkbox" onchange="toggleTodo(this)"><span>Style with CSS</span><button class="todo-delete" onclick="deleteTodo(this)">✕</button></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- COLOUR MIXER -->
+      <div class="demo-panel">
+        <div class="demo-panel-header">
+          <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+          <span class="demo-panel-title">colorMixer.js — real-time input</span>
+        </div>
+        <div class="demo-panel-body">
+          <p style="font-size:0.8rem; color:var(--muted); margin-bottom:0.75rem;">Sliders update CSS <code style="color:var(--js-yellow)">rgb()</code> values live.</p>
+          <div class="mixer-preview" id="mixerPreview" style="background:rgb(128,80,200)"></div>
+          <div class="mixer-row">
+            <label style="color:#f87171">R</label>
+            <input type="range" min="0" max="255" value="128" id="rSlider" oninput="updateMixer()">
+            <span class="mixer-val" id="rVal">128</span>
+          </div>
+          <div class="mixer-row">
+            <label style="color:#4ade80">G</label>
+            <input type="range" min="0" max="255" value="80"  id="gSlider" oninput="updateMixer()">
+            <span class="mixer-val" id="gVal">80</span>
+          </div>
+          <div class="mixer-row">
+            <label style="color:#60a5fa">B</label>
+            <input type="range" min="0" max="255" value="200" id="bSlider" oninput="updateMixer()">
+            <span class="mixer-val" id="bVal">200</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUIZ -->
+      <div class="demo-panel">
+        <div class="demo-panel-header">
+          <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+          <span class="demo-panel-title">quiz.js — conditionals & state</span>
+        </div>
+        <div class="demo-panel-body">
+          <div class="quiz-q" id="quizQuestion">What does <code style="color:var(--js-yellow)">typeof "hello"</code> return?</div>
+          <div class="quiz-options" id="quizOptions">
+            <button class="quiz-btn" onclick="checkAnswer(this, false)">"hello"</button>
+            <button class="quiz-btn" onclick="checkAnswer(this, true)">"string"</button>
+            <button class="quiz-btn" onclick="checkAnswer(this, false)">"text"</button>
+            <button class="quiz-btn" onclick="checkAnswer(this, false)">undefined</button>
+          </div>
+          <div class="quiz-result" id="quizResult"></div>
+          <button class="js-btn outline" onclick="nextQuestion()" style="margin-top:0.75rem; font-size:0.8rem; padding: 0.4rem 0.9rem;">Next question →</button>
+        </div>
+      </div>
+
+    </div><!-- /demo-grid -->
+
+    <!-- DOM DEMO -->
+    <div class="dom-section">
+      <div class="eyebrow">The DOM</div>
+      <h3 style="font-size:1.3rem; font-weight:700; margin-bottom:0.5rem;">Selecting & Modifying Elements</h3>
+      <p style="color:var(--muted); font-size:0.9rem; margin-bottom:1rem;">JavaScript's <code style="color:var(--js-yellow)">document.querySelector()</code> finds elements, then you can change their text, style, or classes.</p>
+
+      <div class="dom-tree">
+<span>document</span>
+<span class="node"><span class="tag-col">&lt;body&gt;</span></span>
+<span class="node2"><span class="tag-col">&lt;h1 id="demo-title"&gt;</span><span class="txt"> "Original Title" </span><span class="tag-col">&lt;/h1&gt;</span></span>
+<span class="node2 target">← JS will target this element</span>
+<span class="node2"><span class="tag-col">&lt;p id="demo-text"&gt;</span><span class="txt"> "Click the button below" </span><span class="tag-col">&lt;/p&gt;</span></span>
+      </div>
+
+      <div style="display:flex; gap:0.75rem; flex-wrap:wrap; margin-bottom:1rem;">
+        <button class="js-btn" onclick="domDemo('text')">Change Text</button>
+        <button class="js-btn" onclick="domDemo('style')">Change Style</button>
+        <button class="js-btn" onclick="domDemo('add')">Add Element</button>
+        <button class="js-btn outline" onclick="domDemo('reset')">Reset</button>
+      </div>
+
+      <div class="dom-output" id="domOutput">// Output will appear here after clicking a button above</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- EVENTS QUICK REF -->
+<section class="section">
+  <div class="eyebrow">Event Reference</div>
+  <h2 class="title">Common Event Types</h2>
+  <p class="desc">JavaScript listens to user interactions using <code style="color:var(--js-yellow); font-family:'JetBrains Mono',monospace">addEventListener()</code>. Every interaction type has a named event.</p>
+
+  <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap:1rem;">
+    <div class="concept-card"><h4>🖱️ click</h4><p>Mouse button pressed and released on an element.</p></div>
+    <div class="concept-card"><h4>⌨️ keydown</h4><p>Any keyboard key is pressed — check <code>event.key</code>.</p></div>
+    <div class="concept-card"><h4>📝 input</h4><p>Value of an input field changes (every keystroke).</p></div>
+    <div class="concept-card"><h4>📤 submit</h4><p>A form is submitted — use <code>preventDefault()</code>.</p></div>
+    <div class="concept-card"><h4>🖱️ mouseover</h4><p>Mouse cursor enters an element's bounding box.</p></div>
+    <div class="concept-card"><h4>📜 scroll</h4><p>User scrolls the page — useful for scroll animations.</p></div>
+    <div class="concept-card"><h4>📦 load</h4><p>Page (or image/script) has fully loaded.</p></div>
+    <div class="concept-card"><h4>🔁 change</h4><p>Value of a select/checkbox/radio changes.</p></div>
+  </div>
+</section>
+
+<footer>Module 05 — JavaScript · Full Stack Complete ✓</footer>
+
+<script>
+  /* ─── COUNTER ─── */
+  let count = 0;
+  function changeCount(delta) {
+    count += delta;
+    const el = document.getElementById('counterDisplay');
+    el.textContent = count;
+    el.classList.remove('bump');
+    void el.offsetWidth; // reflow trick to re-trigger animation
+    el.classList.add('bump');
+    setTimeout(() => el.classList.remove('bump'), 100);
+  }
+  function resetCount() { count = 0; document.getElementById('counterDisplay').textContent = 0; }
+
+  /* ─── TO-DO ─── */
+  function addTodo() {
+    const input = document.getElementById('todoInput');
+    const text = input.value.trim();
+    if (!text) return;
+    const li = document.createElement('li');
+    li.className = 'todo-item';
+    li.innerHTML = `<input type="checkbox" onchange="toggleTodo(this)"><span>${text}</span><button class="todo-delete" onclick="deleteTodo(this)">✕</button>`;
+    document.getElementById('todoList').appendChild(li);
+    input.value = '';
+  }
+  function toggleTodo(cb) {
+    cb.parentElement.classList.toggle('done', cb.checked);
+  }
+  function deleteTodo(btn) {
+    btn.parentElement.style.transition = 'opacity 0.2s';
+    btn.parentElement.style.opacity = '0';
+    setTimeout(() => btn.parentElement.remove(), 200);
+  }
+
+  /* ─── COLOUR MIXER ─── */
+  function updateMixer() {
+    const r = document.getElementById('rSlider').value;
+    const g = document.getElementById('gSlider').value;
+    const b = document.getElementById('bSlider').value;
+    document.getElementById('mixerPreview').style.background = `rgb(${r},${g},${b})`;
+    document.getElementById('rVal').textContent = r;
+    document.getElementById('gVal').textContent = g;
+    document.getElementById('bVal').textContent = b;
+  }
+
+  /* ─── QUIZ ─── */
+  const quizData = [
+    { q: 'What does <code style="color:#f7df1e">typeof "hello"</code> return?', options: ['"hello"', '"string"', '"text"', 'undefined'], correct: 1 },
+    { q: 'Which keyword declares a block-scoped constant?', options: ['var', 'let', 'const', 'static'], correct: 2 },
+    { q: 'What does <code style="color:#f7df1e">[1,2,3].length</code> return?', options: ['2', '4', '3', 'undefined'], correct: 2 },
+    { q: 'Which method adds an item to the END of an array?', options: ['.unshift()', '.shift()', '.pop()', '.push()'], correct: 3 },
+  ];
+  let qIndex = 0;
+  let answered = false;
+
+  function loadQuestion() {
+    const q = quizData[qIndex % quizData.length];
+    document.getElementById('quizQuestion').innerHTML = q.q;
+    const opts = document.getElementById('quizOptions');
+    opts.innerHTML = '';
+    q.options.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'quiz-btn';
+      btn.textContent = opt;
+      btn.onclick = () => checkAnswer(btn, i === q.correct);
+      opts.appendChild(btn);
+    });
+    document.getElementById('quizResult').textContent = '';
+    answered = false;
+  }
+
+  function checkAnswer(btn, correct) {
+    if (answered) return;
+    answered = true;
+    const q = quizData[qIndex % quizData.length];
+    document.querySelectorAll('.quiz-btn').forEach((b, i) => {
+      if (i === q.correct) b.classList.add('correct');
+    });
+    const result = document.getElementById('quizResult');
+    if (correct) {
+      result.textContent = '✅ Correct!';
+      result.style.color = 'var(--green)';
+    } else {
+      btn.classList.add('wrong');
+      result.textContent = '❌ Not quite — see the highlighted answer.';
+      result.style.color = '#ff5f57';
+    }
+  }
+
+  function nextQuestion() { qIndex++; loadQuestion(); }
+
+  /* ─── DOM DEMO ─── */
+  const output = document.getElementById('domOutput');
+  function domDemo(action) {
+    if (action === 'text') {
+      output.innerHTML = `<span style="color:#a5b4fc">// Selecting by ID and changing textContent</span>
+document.getElementById(<span style="color:#4ade80">'demo-title'</span>).textContent = <span style="color:#4ade80">"JavaScript changed me!"</span>;
+
+<span style="color:#a5b4fc">// Result: the h1 text is now updated in the DOM</span>`;
+    } else if (action === 'style') {
+      output.innerHTML = `<span style="color:#a5b4fc">// Changing CSS properties via .style</span>
+<span style="color:#f7df1e">const</span> el = document.querySelector(<span style="color:#4ade80">'h1'</span>);
+el.style.color = <span style="color:#4ade80">"#f7df1e"</span>;
+el.style.fontSize = <span style="color:#4ade80">"3rem"</span>;
+el.style.fontWeight = <span style="color:#4ade80">"900"</span>;
+
+<span style="color:#a5b4fc">// JS directly maps to CSS property names (camelCase)</span>`;
+    } else if (action === 'add') {
+      output.innerHTML = `<span style="color:#a5b4fc">// Creating and inserting a new element</span>
+<span style="color:#f7df1e">const</span> newPara = document.createElement(<span style="color:#4ade80">'p'</span>);
+newPara.textContent = <span style="color:#4ade80">"I was created by JavaScript!"</span>;
+newPara.className = <span style="color:#4ade80">"highlight"</span>;
+
+document.body.appendChild(newPara);
+<span style="color:#a5b4fc">// → New &lt;p&gt; element added to the end of &lt;body&gt;</span>`;
+    } else {
+      output.innerHTML = `<span style="color:#666">// Output will appear here after clicking a button above</span>`;
+    }
+  }
+
+  // Init
+  loadQuestion();
+</script>
+</body>
+</html>

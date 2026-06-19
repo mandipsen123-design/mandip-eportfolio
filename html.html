@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML — Structure of the Web</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #faf7f2;
+    --surface: #ffffff;
+    --ink: #1a1410;
+    --mid: #6b5e52;
+    --faint: #e8e2da;
+    --accent: #e05a2b;
+    --accent2: #1a5cdb;
+    --mono-bg: #1e1a16;
+    --mono-fg: #f0ebe4;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Syne', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+  }
+
+  @media (max-width: 700px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-visual { min-height: 40vh; }
+  }
+
+  .hero-text {
+    padding: 4rem 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 1px solid var(--faint);
+  }
+
+  .badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 2px;
+    letter-spacing: 0.1em;
+    margin-bottom: 2rem;
+  }
+
+  .hero-text h1 {
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 800;
+    line-height: 0.95;
+    margin-bottom: 1.5rem;
+    color: var(--ink);
+  }
+
+  .hero-text h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .hero-text p {
+    font-size: 1rem;
+    color: var(--mid);
+    line-height: 1.7;
+    max-width: 420px;
+  }
+
+  .hero-visual {
+    background: var(--mono-bg);
+    padding: 3rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .code-file {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.9;
+    color: var(--mono-fg);
+  }
+
+  .code-file .tag-o  { color: #f97316; }
+  .code-file .tag-c  { color: #f97316; }
+  .code-file .attr   { color: #a5f3fc; }
+  .code-file .val    { color: #86efac; }
+  .code-file .cm     { color: #6b7280; }
+  .code-file .txt    { color: #fde68a; }
+  .code-file .ind    { padding-left: 1.5rem; display: block; }
+  .code-file .ind2   { padding-left: 3rem; display: block; }
+  .code-file .ind3   { padding-left: 4.5rem; display: block; }
+
+  /* ANATOMY */
+  .anatomy-section {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+  }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  h2.section-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--ink);
+    margin-bottom: 1rem;
+    line-height: 1.1;
+  }
+
+  .desc {
+    color: var(--mid);
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 600px;
+    margin-bottom: 3rem;
+  }
+
+  /* TAG ANATOMY DIAGRAM */
+  .anatomy-diagram {
+    background: var(--mono-bg);
+    border-radius: 16px;
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .anatomy-diagram::before {
+    content: 'tag anatomy';
+    position: absolute;
+    top: 1rem; right: 1.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: #374151;
+    letter-spacing: 0.1em;
+  }
+
+  .tag-display {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(1.1rem, 3vw, 1.6rem);
+    color: var(--mono-fg);
+    text-align: center;
+    margin-bottom: 2rem;
+    white-space: nowrap;
+    overflow-x: auto;
+    padding: 1rem;
+  }
+
+  .tag-display .t-angle { color: #6b7280; }
+  .tag-display .t-name  { color: #f97316; }
+  .tag-display .t-attr  { color: #a5f3fc; }
+  .tag-display .t-eq    { color: #d1d5db; }
+  .tag-display .t-val   { color: #86efac; }
+  .tag-display .t-text  { color: #fde68a; }
+  .tag-display .t-slash { color: #6b7280; }
+
+  .anatomy-labels {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .anatomy-label {
+    text-align: center;
+  }
+
+  .anatomy-label .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin: 0 auto 0.4rem;
+  }
+
+  .anatomy-label span {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: #9ca3af;
+  }
+
+  .anatomy-label strong {
+    display: block;
+    font-size: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--mono-fg);
+  }
+
+  /* SEMANTIC TAGS */
+  .semantic-section {
+    background: var(--surface);
+    border-top: 1px solid var(--faint);
+    border-bottom: 1px solid var(--faint);
+    padding: 5rem 2rem;
+  }
+
+  .semantic-inner {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .semantic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 2.5rem;
+  }
+
+  .sem-card {
+    border: 1.5px solid var(--faint);
+    border-radius: 10px;
+    padding: 1.25rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    cursor: default;
+  }
+
+  .sem-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 20px rgba(224,90,43,0.1);
+  }
+
+  .sem-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .sem-card p {
+    font-size: 0.82rem;
+    color: var(--mid);
+    line-height: 1.5;
+  }
+
+  /* PAGE WIREFRAME DEMO */
+  .wireframe-section {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+  }
+
+  .wireframe {
+    border: 2px dashed var(--faint);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 2.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+  }
+
+  .wf-header {
+    background: #ffe8df;
+    border-bottom: 2px dashed var(--faint);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .wf-header .wf-label { color: var(--accent); font-weight: 600; }
+  .wf-nav { display: flex; gap: 1rem; color: var(--mid); }
+
+  .wf-body {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 0;
+  }
+
+  @media(max-width:600px) { .wf-body { grid-template-columns: 1fr; } }
+
+  .wf-main {
+    padding: 1.5rem;
+    border-right: 1px dashed var(--faint);
+  }
+
+  .wf-hero-block {
+    background: #e8effe;
+    border: 1px dashed #1a5cdb40;
+    border-radius: 6px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--accent2);
+  }
+
+  .wf-article {
+    background: #f4f4f4;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    color: var(--mid);
+  }
+
+  .wf-sidebar {
+    padding: 1.5rem;
+    background: #faf7f2;
+  }
+
+  .wf-aside {
+    background: #fff8e1;
+    border: 1px dashed #f97316;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    color: #b45309;
+  }
+
+  .wf-footer {
+    background: var(--ink);
+    color: #6b7280;
+    padding: 0.75rem 1.25rem;
+    border-top: 1px dashed var(--faint);
+    text-align: center;
+  }
+
+  .wf-tag {
+    display: inline-block;
+    font-size: 0.6rem;
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+    font-weight: 600;
+    margin-right: 0.3rem;
+    vertical-align: middle;
+  }
+  .wf-tag.r { background: var(--accent); color: #fff; }
+  .wf-tag.b { background: var(--accent2); color: #fff; }
+  .wf-tag.o { background: #f97316; color: #fff; }
+  .wf-tag.d { background: var(--ink); color: #fff; }
+
+  /* FORMS DEMO */
+  .forms-section {
+    background: var(--mono-bg);
+    padding: 5rem 2rem;
+  }
+
+  .forms-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  @media(max-width:700px) { .forms-inner { grid-template-columns: 1fr; } }
+
+  .forms-inner .eyebrow, .forms-inner h2, .forms-inner .desc { color: var(--mono-fg); }
+  .forms-inner .eyebrow { color: #f97316; }
+  .forms-inner .desc { color: #9ca3af; }
+
+  .live-form {
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 2rem;
+  }
+
+  .live-form h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--ink);
+  }
+
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--mid);
+    margin-bottom: 0.4rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.6rem 0.9rem;
+    border: 1.5px solid var(--faint);
+    border-radius: 6px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    color: var(--ink);
+    background: #fff;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--accent);
+  }
+
+  .form-group textarea { resize: vertical; min-height: 80px; }
+
+  .submit-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 6px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.2s;
+  }
+
+  .submit-btn:hover { background: #c04a20; }
+
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--mid);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--faint);
+    font-family: 'JetBrains Mono', monospace;
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <span class="badge">Module 02</span>
+    <h1>H<em>T</em>ML<br>Structure</h1>
+    <p>HyperText Markup Language defines the skeleton of every web page — the raw, semantic content that browsers, screen readers, and search engines all rely on.</p>
+  </div>
+  <div class="hero-visual">
+    <div class="code-file">
+<span>&lt;!<span class="tag-o">DOCTYPE</span> html&gt;</span>
+<span><span class="tag-o">&lt;html</span> <span class="attr">lang</span>=<span class="val">"en"</span><span class="tag-c">&gt;</span></span>
+<span class="ind"><span class="tag-o">&lt;head&gt;</span></span>
+<span class="ind2"><span class="tag-o">&lt;meta</span> <span class="attr">charset</span>=<span class="val">"UTF-8"</span><span class="tag-c">/&gt;</span></span>
+<span class="ind2"><span class="tag-o">&lt;title&gt;</span><span class="txt">My Page</span><span class="tag-c">&lt;/title&gt;</span></span>
+<span class="ind"><span class="tag-c">&lt;/head&gt;</span></span>
+<span class="ind"><span class="tag-o">&lt;body&gt;</span></span>
+<span class="ind2"><span class="tag-o">&lt;header&gt;</span></span>
+<span class="ind3"><span class="tag-o">&lt;h1&gt;</span><span class="txt">Hello, World</span><span class="tag-c">&lt;/h1&gt;</span></span>
+<span class="ind2"><span class="tag-c">&lt;/header&gt;</span></span>
+<span class="ind2"><span class="tag-o">&lt;main&gt;</span></span>
+<span class="ind3"><span class="tag-o">&lt;p&gt;</span><span class="txt">Content goes here.</span><span class="tag-c">&lt;/p&gt;</span></span>
+<span class="ind2"><span class="tag-c">&lt;/main&gt;</span></span>
+<span class="ind2"><span class="tag-o">&lt;footer&gt;</span><span class="txt">© 2025</span><span class="tag-c">&lt;/footer&gt;</span></span>
+<span class="ind"><span class="tag-c">&lt;/body&gt;</span></span>
+<span><span class="tag-c">&lt;/html&gt;</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- TAG ANATOMY -->
+<section class="anatomy-section">
+  <div class="eyebrow">Tag Anatomy</div>
+  <h2 class="section-title">Dissecting an HTML Element</h2>
+  <p class="desc">Every HTML element follows the same pattern — an opening tag, optional content, and a closing tag. Some tags are self-closing.</p>
+
+  <div class="anatomy-diagram">
+    <div class="tag-display">
+      <span class="t-angle">&lt;</span><span class="t-name">a</span>&nbsp;<span class="t-attr">href</span><span class="t-eq">=</span><span class="t-val">"https://example.com"</span><span class="t-angle">&gt;</span><span class="t-text">Click here</span><span class="t-angle">&lt;/</span><span class="t-name">a</span><span class="t-angle">&gt;</span>
+    </div>
+    <div class="anatomy-labels">
+      <div class="anatomy-label">
+        <div class="dot" style="background:#f97316"></div>
+        <strong>&lt;a</strong>
+        <span>Opening tag / element name</span>
+      </div>
+      <div class="anatomy-label">
+        <div class="dot" style="background:#a5f3fc"></div>
+        <strong>href</strong>
+        <span>Attribute name</span>
+      </div>
+      <div class="anatomy-label">
+        <div class="dot" style="background:#86efac"></div>
+        <strong>"https://..."</strong>
+        <span>Attribute value</span>
+      </div>
+      <div class="anatomy-label">
+        <div class="dot" style="background:#fde68a"></div>
+        <strong>Click here</strong>
+        <span>Text content</span>
+      </div>
+      <div class="anatomy-label">
+        <div class="dot" style="background:#6b7280"></div>
+        <strong>&lt;/a&gt;</strong>
+        <span>Closing tag</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEMANTIC TAGS -->
+<section class="semantic-section">
+  <div class="semantic-inner">
+    <div class="eyebrow">Semantic HTML</div>
+    <h2 class="section-title">Tags That Mean Something</h2>
+    <p class="desc">Semantic tags tell browsers <em>and developers</em> what a piece of content actually is — not just what it looks like. This improves accessibility, SEO, and code readability.</p>
+
+    <div class="semantic-grid">
+      <div class="sem-card">
+        <div class="sem-tag">&lt;header&gt;</div>
+        <p>Introductory content or navigation. Usually at the top of a page or section.</p>
+      </div>
+      <div class="sem-card">
+        <div class="sem-tag">&lt;nav&gt;</div>
+        <p>A set of navigation links — site menus, breadcrumbs, pagination.</p>
+      </div>
+      <div class="sem-card">
+        <div class="sem-tag">&lt;main&gt;</div>
+        <p>The dominant, unique content of the page — only one per document.</p>
+      </div>
+      <div class="sem-card">
+        <div class="sem-tag">&lt;article&gt;</div>
+        <p>Self-contained, independently distributable content — a blog post, news story.</p>
+      </div>
+      <div class="sem-card">
+        <div class="sem-tag">&lt;section&gt;</div>
+        <p>A thematic grouping of content, typically with a heading.</p>
+      </div>
+      <div class="sem-card">
+        <div class="sem-tag">&lt;aside&gt;</div>
+        <p>Content tangentially related to the main content — sidebars, callouts.</p>
+      </div>
+      <div class="sem-card">
+        <div class="sem-tag">&lt;footer&gt;</div>
+        <p>Closing content — copyright, links, author info for a page or section.</p>
+      </div>
+      <div class="sem-card">
+        <div class="sem-tag">&lt;figure&gt;</div>
+        <p>Self-contained media (image, diagram, code) with an optional caption.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAGE WIREFRAME -->
+<section class="wireframe-section">
+  <div class="eyebrow">Live Demo</div>
+  <h2 class="section-title">A Semantic Page Layout</h2>
+  <p class="desc">This wireframe shows how semantic HTML elements map to real page regions. Each coloured label is an actual HTML tag.</p>
+
+  <div class="wireframe">
+    <div class="wf-header">
+      <span class="wf-label"><span class="wf-tag r">&lt;header&gt;</span> MySite</span>
+      <div class="wf-nav">
+        <span class="wf-tag b">&lt;nav&gt;</span>
+        <span>Home</span><span>About</span><span>Blog</span>
+      </div>
+    </div>
+    <div class="wf-body">
+      <div class="wf-main">
+        <div class="wf-hero-block">
+          <span class="wf-tag b">&lt;section&gt;</span> Hero — "Welcome to MySite"
+        </div>
+        <div class="wf-article">
+          <span class="wf-tag r">&lt;article&gt;</span> Blog Post: "Getting Started with HTML"<br>
+          <span style="opacity:0.6">Published on 19 Jun 2025 — 5 min read</span>
+        </div>
+        <div class="wf-article">
+          <span class="wf-tag r">&lt;article&gt;</span> Blog Post: "Semantic Markup Matters"<br>
+          <span style="opacity:0.6">Published on 12 Jun 2025 — 4 min read</span>
+        </div>
+      </div>
+      <div class="wf-sidebar">
+        <div class="wf-aside">
+          <span class="wf-tag o">&lt;aside&gt;</span> About the Author
+        </div>
+        <div class="wf-aside">
+          <span class="wf-tag o">&lt;aside&gt;</span> Popular Posts
+        </div>
+      </div>
+    </div>
+    <div class="wf-footer">
+      <span class="wf-tag d">&lt;footer&gt;</span> © 2025 MySite · Privacy · Terms
+    </div>
+  </div>
+</section>
+
+<!-- FORMS -->
+<section class="forms-section">
+  <div class="forms-inner">
+    <div>
+      <div class="eyebrow">HTML Forms</div>
+      <h2 class="section-title" style="color:var(--mono-fg)">User Input Elements</h2>
+      <p class="desc">Forms are how HTML collects data from users. The <code style="color:#f97316; font-family:'JetBrains Mono',monospace">&lt;form&gt;</code> element groups inputs, and each input has a <code style="color:#f97316; font-family:'JetBrains Mono',monospace">name</code>, <code style="color:#f97316; font-family:'JetBrains Mono',monospace">type</code>, and <code style="color:#f97316; font-family:'JetBrains Mono',monospace">placeholder</code> to guide the user.</p>
+      <br>
+      <p class="desc">The form on the right uses: <code style="color:#a5f3fc; font-family:'JetBrains Mono',monospace">&lt;input type="text"&gt;</code>, <code style="color:#a5f3fc; font-family:'JetBrains Mono',monospace">&lt;input type="email"&gt;</code>, <code style="color:#a5f3fc; font-family:'JetBrains Mono',monospace">&lt;select&gt;</code>, <code style="color:#a5f3fc; font-family:'JetBrains Mono',monospace">&lt;textarea&gt;</code>, and <code style="color:#a5f3fc; font-family:'JetBrains Mono',monospace">&lt;button type="submit"&gt;</code>.</p>
+    </div>
+    <div class="live-form">
+      <h3>Contact Form</h3>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" placeholder="Priya Sharma">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" placeholder="priya@example.com">
+      </div>
+      <div class="form-group">
+        <label>Topic</label>
+        <select>
+          <option>General Enquiry</option>
+          <option>Technical Support</option>
+          <option>Partnership</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea placeholder="Write your message here..."></textarea>
+      </div>
+      <button class="submit-btn">Send Message</button>
+    </div>
+  </div>
+</section>
+
+<footer>Module 02 — HTML · Next: CSS Styling →</footer>
+</body>
+</html>
